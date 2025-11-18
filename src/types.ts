@@ -7,7 +7,7 @@ export enum CentaurLevel {
 }
 
 export interface LevelDescription {
-  title: CentaurLevel;
+  title: string;
   description: string;
   keywords: string[];
   scoreRange: [number, number]; // e.g., [1, 1.9]
