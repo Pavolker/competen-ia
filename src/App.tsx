@@ -4,6 +4,7 @@ import { CentaurLevel, AssessmentResult } from './types';
 import CentaurChart from './components/CentaurChart';
 import ProfileModal from './components/ProfileModal';
 import CentaurExplanation from './components/CentaurExplanation';
+import ProfilePage from './components/ProfilePage';
 import { ArrowRight, CheckCircle2, ChevronRight, RotateCcw, Sparkles, Trophy, Target, Eye, BarChart3 } from 'lucide-react';
 
 // --- Components ---
@@ -255,6 +256,7 @@ function App() {
   const [finished, setFinished] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showProfilePage, setShowProfilePage] = useState(false);
 
   const handleStart = () => {
     setStarted(true);
@@ -270,6 +272,7 @@ function App() {
     setFinished(false);
     setShowExplanation(false);
     setShowProfileModal(false);
+    setShowProfilePage(false);
   };
 
   const handleAnswer = (score: number) => {
@@ -313,26 +316,21 @@ function App() {
         onClose={() => setShowExplanation(false)}
         onNext={() => {
           setShowExplanation(false);
-          setShowProfileModal(true);
+          setShowProfilePage(true);
         }}
       />
     );
   }
 
-  if (showProfileModal) {
+  if (showProfilePage && result) {
     return (
-      <div className="relative">
-        <ProfileModal />
-        <button
-          onClick={() => {
-            setShowProfileModal(false);
-            setFinished(true);
-          }}
-          className="fixed bottom-6 right-6 px-4 py-2 bg-slate-400 hover:bg-slate-500 text-white rounded-lg transition-colors"
-        >
-          Fechar
-        </button>
-      </div>
+      <ProfilePage 
+        level={result.overallLevel}
+        onBack={() => {
+          setShowProfilePage(false);
+          setFinished(true);
+        }}
+      />
     );
   }
 
