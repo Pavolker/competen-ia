@@ -3,8 +3,6 @@ import { COMPETENCIES, LEVEL_DESCRIPTIONS } from './constants';
 import { CentaurLevel, AssessmentResult } from './types';
 import CentaurChart from './components/CentaurChart';
 import ProfileModal from './components/ProfileModal';
-import CentaurExplanation from './components/CentaurExplanation';
-import ProfilePage from './components/ProfilePage';
 import { ArrowRight, CheckCircle2, ChevronRight, RotateCcw, Sparkles, Trophy, Target, Eye, BarChart3 } from 'lucide-react';
 
 // --- Components ---
@@ -136,11 +134,17 @@ const QuizScreen = ({
   );
 };
 
-const ResultsScreen = ({ result, onReset, onDeepDive }: { result: AssessmentResult; onReset: () => void; onDeepDive: () => void }) => {
+const ResultsScreen = ({ result, onReset }: { result: AssessmentResult; onReset: () => void }) => {
   const levelData = LEVEL_DESCRIPTIONS[result.overallLevel];
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   return (
     <>
+      <ProfileModal 
+        isOpen={showProfileModal} 
+        onClose={() => setShowProfileModal(false)}
+        level={result.overallLevel}
+      />
       <div className="min-h-screen bg-slate-50 p-6 pb-20">
       <div className="container mx-auto max-w-5xl space-y-8">
         
@@ -234,7 +238,7 @@ const ResultsScreen = ({ result, onReset, onDeepDive }: { result: AssessmentResu
               <RotateCcw size={18} />
               Refazer Avaliação
             </button>
-            <button onClick={onDeepDive} className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-500 transition-colors flex items-center gap-2">
+            <button onClick={() => setShowProfileModal(true)} className="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-500 transition-colors flex items-center gap-2">
               <ChevronRight size={18} />
               Aprofundar Perfil
             </button>
@@ -254,9 +258,6 @@ function App() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [finished, setFinished] = useState(false);
-  const [showExplanation, setShowExplanation] = useState(false);
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [showProfilePage, setShowProfilePage] = useState(false);
 
   const handleStart = () => {
     setStarted(true);
@@ -270,9 +271,6 @@ function App() {
     setCurrentStep(0);
     setAnswers({});
     setFinished(false);
-    setShowExplanation(false);
-    setShowProfileModal(false);
-    setShowProfilePage(false);
   };
 
   const handleAnswer = (score: number) => {
@@ -310,32 +308,8 @@ function App() {
     return <WelcomeScreen onStart={handleStart} />;
   }
 
-  if (showExplanation) {
-    return (
-      <CentaurExplanation 
-        onClose={() => setShowExplanation(false)}
-        onNext={() => {
-          setShowExplanation(false);
-          setShowProfilePage(true);
-        }}
-      />
-    );
-  }
-
-  if (showProfilePage && result) {
-    return (
-      <ProfilePage 
-        level={result.overallLevel}
-        onBack={() => {
-          setShowProfilePage(false);
-          setFinished(true);
-        }}
-      />
-    );
-  }
-
   if (finished && result) {
-    return <ResultsScreen result={result} onReset={handleReset} onDeepDive={() => setShowExplanation(true)} />;
+    return <ResultsScreen result={result} onReset={handleReset} />;
   }
 
   return (
