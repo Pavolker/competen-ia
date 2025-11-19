@@ -95,7 +95,7 @@ export default function CentaurExplanation({ onClose, onNext }: CentaurExplanati
       </div>
 
       {/* Footer Navigation */}
-      <div className="flex justify-end mt-12 pt-8 border-t border-white/10">
+      <div className="flex justify-center mt-12 pt-8 border-t border-white/10">
         <button
           onClick={onNext}
           className="flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-indigo-500/50"
